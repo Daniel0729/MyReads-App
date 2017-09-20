@@ -1,24 +1,14 @@
 import React, { Component } from 'react';
-import * as BooksAPI from './BooksAPI';
+
 class CurrentRead extends Component {
-    state = {
-        books:[]
-    }
-    componentDidMount() {
-        BooksAPI.getAll().then((books) => {
-            this.setState({
-                books:books
-            });
-        }); 
-    }
+    
     render() {
         return (
             <div className="bookshelf">
             <h2 className="bookshelf-title">Currently Reading</h2>
             <div className="bookshelf-books">
                 <ol className="books-grid">
-                    {this.state.books.map((book) => (console.log(book)))}
-                    {this.state.books.map((book) => (
+                    {this.props.allBooks.map((book) => (
                         (book.shelf === "currentlyReading")&&
                         <li key={book.id}>
                             <div className="book">
