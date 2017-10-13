@@ -21,17 +21,7 @@ class BooksApp extends React.Component {
           this.setState({ books });
       }); 
   }
-  updateShelf = (book, shelf) => {
-    BooksAPI.update(book, shelf).then((book) => {
-      this.setState((state) => {
-        books:state.books.forEach((b) => {
-          if(b.id == book.id) {
-            b.shelf = book.shelf;
-          }
-        });
-      });
-    });
-  }
+  
  
   render() {
     return (
@@ -40,16 +30,14 @@ class BooksApp extends React.Component {
               <h1>MyReads</h1>
             </div>
               <CurrentRead 
-              allBooks={this.state.books}
-              onUpdateShelf={(book,shelf) => {
-                this.updateShelf(book,shelf)
-              }}/>
+              allBooks={this.state.books.filter((book)=>(book.shelf === "currentlyReading"))}
+              />
             <div className="list-books-content">
               <div>
-                <WantRead allBooks={this.state.books}/>
+                <WantRead allBooks={this.state.books.filter((book)=>(book.shelf === "wantToRead"))}/>
               </div>
               <div>    
-                <AlreadyRead allBooks={this.state.books}/>
+                <AlreadyRead allBooks={this.state.books.filter((book)=>(book.shelf === "read"))}/>
               </div>
             </div>
       </div>
