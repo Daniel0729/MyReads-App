@@ -1,7 +1,7 @@
 import React from 'react';
-import * as BooksAPI from './BooksAPI';
-import bookShelf from './bookShelf';
-import './App.css'
+import * as BooksAPI from '../BooksAPI';
+import BookShelf from './bookShelf';
+import '../App.css'
 
 class BooksApp extends React.Component {
   state = {
@@ -19,6 +19,16 @@ class BooksApp extends React.Component {
           this.setState({ books });
       }); 
   }
+  updateShelf = (shelf,book) => {
+    BooksAPI.update(book,shelf).then(Response => console.log(Response));
+    let selectBook = this.state.books.filter((b) => (book.id === b.id));
+    let otherBook = this.state.books.filter((b) => (book.id !== b.id));
+    selectBook[0].shelf = shelf;
+    let temp = selectBook.concat(otherBook);
+
+    this.setState({books: temp});
+    
+  }
   
  
   render() {
@@ -27,21 +37,24 @@ class BooksApp extends React.Component {
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
-              <bookShelf 
+              <BookShelf 
               allBooks={this.state.books.filter((book)=>(book.shelf === "currentlyReading"))}
               shelf='currentlyReading'
+              onUpdateShelf={this.updateShelf}
               />
             <div className="list-books-content">
               <div>
-                <bookShelf 
+                <BookShelf 
                 allBooks={this.state.books.filter((book)=>(book.shelf === "wantToRead"))}
                 shelf='wantToRead'
+                onUpdateShelf={this.updateShelf}
                 />
               </div>
               <div>    
-                <bookShelf
+                <BookShelf
                 allBooks={this.state.books.filter((book)=>(book.shelf === "read"))}
                 shelf='read'
+                onUpdateShelf={this.updateShelf}
                 />
               </div>
             </div>
