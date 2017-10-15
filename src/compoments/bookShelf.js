@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
-
-
-class CurrentRead extends Component {
+class BookShelf extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             booksCurrent:nextProps.allBooks
@@ -10,16 +8,6 @@ class CurrentRead extends Component {
     }
     state={
         booksCurrent: this.props.allBooks
-    }
-
-    handleChange(value,book) {
-        //BooksAPI.update(book,value).then(Response => console.log(Response));
-        let selectBook = this.state.booksCurrent.filter((b) => (book.id === b.id));
-        let otherBook = this.state.booksCurrent.filter((b) => (book.id !== b.id));
-        selectBook[0].shelf = value;
-        let temp = selectBook.concat(otherBook);
-
-        this.setState({booksCurrent: temp});
     }
     render() {
         return (
@@ -53,5 +41,5 @@ class CurrentRead extends Component {
         )
     }
 }
-export default CurrentRead;
+export default BookShelf
 
