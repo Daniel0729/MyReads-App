@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-//import * as BooksAPI from './BooksAPI';
+import * as BooksAPI from './BooksAPI';
 
 
 class CurrentRead extends Component {
@@ -13,10 +13,13 @@ class CurrentRead extends Component {
     }
 
     handleChange(value,book) {
-        //BooksAPI.update(book.id,e.target.value).then(console.log(response));
+        BooksAPI.update(book,value).then(Response => console.log(Response));
         let selectBook = this.state.booksCurrent.filter((b) => (book.id === b.id));
-        console.log(selectBook);
-        console.log(value);
+        let otherBook = this.state.booksCurrent.filter((b) => (book.id !== b.id));
+        selectBook[0].shelf = value;
+        let temp = selectBook.concat(otherBook);
+
+        this.setState({booksCurrent: temp});
     }
     render() {
         return (
@@ -24,7 +27,7 @@ class CurrentRead extends Component {
             <h2 className="bookshelf-title">Currently Reading</h2>
             <div className="bookshelf-books">
                 <ol className="books-grid">
-                    {this.state.booksCurrent.map((book) => (
+                    {this.state.booksCurrent.filter((book) => (book.shelf === 'currentlyReading')).map((book) => (
                         <li key={book.id}>
                             <div className="book">
                                 <div className="book-top">

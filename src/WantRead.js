@@ -1,7 +1,25 @@
 import React ,{ Component } from 'react';
-
+import * as BooksAPI from './BooksAPI';
 
 class WantRead extends Component {
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            booksCurrent:nextProps.allBooks
+        });
+    }
+    state={
+        booksCurrent: this.props.allBooks
+    }
+
+    handleChange(value,book) {
+        BooksAPI.update(book,value).then(Response => console.log(Response));
+        let selectBook = this.state.booksCurrent.filter((b) => (book.id === b.id));
+        let otherBook = this.state.booksCurrent.filter((b) => (book.id !== b.id));
+        selectBook[0].shelf = value;
+        let temp = selectBook.concat(otherBook);
+
+        this.setState({booksCurrent: temp});
+    }
 
     render() {
         return (
@@ -9,13 +27,13 @@ class WantRead extends Component {
                 <h2 className="bookshelf-title">Want to Read</h2>
                 <div className="bookshelf-books">
                     <ol className="books-grid">
-                        {this.props.allBooks.map((book) => (
+                        {this.state.booksCurrent.filter((book) => (book.shelf === 'wantToRead')).map((book) => (
                         <li key={book.id}>
                             <div className="book">
                                 <div className="book-top">
                                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
                                 <div className="book-shelf-changer">
-                                    <select defaultValue={book.shelf}>
+                                    <select defaultValue={book.shelf} onChange={(event) => this.handleChange(event.target.value, book)}>
                                     <option value="none" disabled>Move to...</option>
                                     <option value="currentlyReading">Currently Reading</option>
                                     <option value="wantToRead">Want to Read</option>
