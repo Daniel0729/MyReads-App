@@ -1,7 +1,8 @@
-import React ,{ Component } from 'react';
+import React, { Component } from 'react';
 import * as BooksAPI from './BooksAPI';
 
-class WantRead extends Component {
+
+class CurrentRead extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             booksCurrent:nextProps.allBooks
@@ -20,14 +21,13 @@ class WantRead extends Component {
 
         this.setState({booksCurrent: temp});
     }
-
     render() {
         return (
             <div className="bookshelf">
-                <h2 className="bookshelf-title">Want to Read</h2>
-                <div className="bookshelf-books">
-                    <ol className="books-grid">
-                        {this.state.booksCurrent.filter((book) => (book.shelf === 'wantToRead')).map((book) => (
+            <h2 className="bookshelf-title">${this.props.shelf}</h2>
+            <div className="bookshelf-books">
+                <ol className="books-grid">
+                    {this.state.booksCurrent.filter((book) => (book.shelf === this.props.shelf)).map((book) => (
                         <li key={book.id}>
                             <div className="book">
                                 <div className="book-top">
@@ -47,10 +47,11 @@ class WantRead extends Component {
                             </div>
                         </li>
                     ))}
-                    </ol>
-                </div>
+                </ol>
             </div>
+        </div>
         )
     }
 }
-export default WantRead;
+export default CurrentRead;
+

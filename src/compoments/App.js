@@ -1,8 +1,6 @@
 import React from 'react';
 import * as BooksAPI from './BooksAPI';
-import CurrentRead from './CurrentRead';
-import WantRead from './WantRead';
-import AlreadyRead from './AlreadyRead';
+import bookShelf from './bookShelf';
 import './App.css'
 
 class BooksApp extends React.Component {
@@ -29,15 +27,22 @@ class BooksApp extends React.Component {
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
-              <CurrentRead 
+              <bookShelf 
               allBooks={this.state.books.filter((book)=>(book.shelf === "currentlyReading"))}
+              shelf='currentlyReading'
               />
             <div className="list-books-content">
               <div>
-                <WantRead allBooks={this.state.books.filter((book)=>(book.shelf === "wantToRead"))}/>
+                <bookShelf 
+                allBooks={this.state.books.filter((book)=>(book.shelf === "wantToRead"))}
+                shelf='wantToRead'
+                />
               </div>
               <div>    
-                <AlreadyRead allBooks={this.state.books.filter((book)=>(book.shelf === "read"))}/>
+                <bookShelf
+                allBooks={this.state.books.filter((book)=>(book.shelf === "read"))}
+                shelf='read'
+                />
               </div>
             </div>
       </div>
