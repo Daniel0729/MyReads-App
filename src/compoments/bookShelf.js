@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 class BookShelf extends Component {
+    //set state
     componentWillReceiveProps(nextProps) {
         this.setState({
             booksCurrent:nextProps.allBooks
@@ -31,7 +32,9 @@ class BookShelf extends Component {
                                 </div>
                                 </div>
                                 <div className="book-title">{book.title}</div>
-                                {book.authors.map((author) => <div  key={author} className="book-authors">{author}</div>)}
+                                {book.authors && ( book.authors.map((author) => (
+                                        <div key={author} className="book-authors">{author}</div>
+                                )))} 
                             </div>
                         </li>
                     ))}
