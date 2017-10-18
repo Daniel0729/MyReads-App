@@ -4,17 +4,29 @@ import '../App.css';
 
 class SearchBook extends React.Component {
     state = {
-        searchBooks:[]
+        searchBooks:[],
+        booksOnShelf: this.props.bookOnShelf
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            booksOnShelf:nextProps.bookOnShelf
+        });
     }
 
     searchBook =(query) => {
-        console.log(query);
-        console.log(query.length);
         BooksAPI.search(query).then(Response => {
             if (!Response.error) {
-                console.log(Response);
+                for (let book of this.state.booksOnShelf) {
+                    Response = Response.filter((b) => b.id !== book.id);
+                }
+                let temp = Response.map(function(book) {
+                    book.shelf = 'none';
+                    return book;
+                });
+                temp = temp.concat(this.state.booksOnShelf);
                 this.setState({
-                    searchBooks: Response
+                    searchBooks: temp
                 })
             }
             else {
@@ -61,7 +73,8 @@ class SearchBook extends React.Component {
                                     </div>
                                     </div>
                                     <div className="book-title">{book.title}</div>
-                                    <div className="book-authors">{book.authors}</div>
+                                    {book.authors.map((author) => <div  key={author} className="book-authors">{author}</div>)}
+                                    
                                 </div>
                             </li>))) : (
                                 <div>
