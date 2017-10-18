@@ -1,6 +1,7 @@
 import React from 'react';
 import * as BooksAPI from '../BooksAPI';
 import '../App.css';
+import { Link } from 'react-router-dom';
 
 class SearchBook extends React.Component {
     state = {
@@ -15,34 +16,36 @@ class SearchBook extends React.Component {
     }
 
     searchBook =(query) => {
-        BooksAPI.search(query).then(Response => {
-            if (!Response.error) {
-                for (let book of this.state.booksOnShelf) {
-                    Response = Response.filter((b) => b.id !== book.id);
+        if (query) {
+            BooksAPI.search(query).then(Response => {
+                if (!Response.error) {
+                    for (let book of this.state.booksOnShelf) {
+                        Response = Response.filter((b) => b.id !== book.id);
+                    }
+                    let temp = Response.map(function(book) {
+                        book.shelf = 'none';
+                        return book;
+                    });
+                    temp = temp.concat(this.state.booksOnShelf);
+                    this.setState({
+                        searchBooks: temp
+                    })
                 }
-                let temp = Response.map(function(book) {
-                    book.shelf = 'none';
-                    return book;
-                });
-                temp = temp.concat(this.state.booksOnShelf);
-                this.setState({
-                    searchBooks: temp
-                })
-            }
-            else {
-                console.log(Error(`something wrong`));
-                this.setState({
-                    searchBooks:[]
-                })
-                
-            }
-        })
+                else {
+                    console.log(Error(`something wrong`));
+                    this.setState({
+                        searchBooks:[]
+                    })
+                    
+                }
+            })
+        }
     }
     render() {
         return (
             <div className="search-books">
                 <div className="search-books-bar">
-                    <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
+                    <Link className="close-search" to='/'>Close</Link>
                     <div className="search-books-input-wrapper">
                     {/*
                         NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -61,20 +64,22 @@ class SearchBook extends React.Component {
                             <li key={book.id}>
                                 <div className="book">
                                     <div className="book-top">
-                                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
-                                    <div className="book-shelf-changer">
-                                        <select defaultValue={book.shelf} onChange={(event) => this.props.onUpdateShelf(event.target.value,book)}>
-                                        <option value="none" disabled>Move to...</option>
-                                        <option value="currentlyReading">Currently Reading</option>
-                                        <option value="wantToRead">Want to Read</option>
-                                        <option value="read">Read</option>
-                                        <option value="none">None</option>
-                                        </select>
-                                    </div>
+                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}>
+                                        </div>
+                                        <div className="book-shelf-changer">
+                                            <select defaultValue={book.shelf} onChange={(event) => this.props.onUpdateShelf(event.target.value,book)}>
+                                                <option value="none" disabled>Move to...</option>
+                                                <option value="currentlyReading">Currently Reading</option>
+                                                <option value="wantToRead">Want to Read</option>
+                                                <option value="read">Read</option>
+                                                <option value="none">None</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div className="book-title">{book.title}</div>
-                                    {book.authors.map((author) => <div  key={author} className="book-authors">{author}</div>)}
-                                    
+                                    {book.authors && ( book.authors.map((author) => (
+                                        <div key={author} className="book-authors">${author}</div>
+                                    )))}   
                                 </div>
                             </li>))) : (
                                 <div>
