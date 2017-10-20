@@ -18,16 +18,18 @@ class SearchBook extends React.Component {
     //use the search query to update the book's shelf,if nothing find or Error happen, console log the Error message
     searchBook =(query) => {
         if (query) {
+            let onShelf = [];
             BooksAPI.search(query).then(Response => {
                 if (!Response.error) {
                     for (let book of this.state.booksOnShelf) {
                         Response = Response.filter((b) => b.id !== book.id);
+                        onShelf = onShelf.concat(Response.filter((b) => b.id === book.id)); 
                     }
                     let temp = Response.map(function(book) {
                         book.shelf = 'none';
                         return book;
                     });
-                    temp = temp.concat(this.state.booksOnShelf);
+                    temp = temp.concat(onShelf);
                     this.setState({
                         searchBooks: temp
                     })
@@ -39,6 +41,11 @@ class SearchBook extends React.Component {
                     })
                     
                 }
+            })
+        }
+        else {
+            this.setState({
+                searchBooks:[]
             })
         }
     }
@@ -59,8 +66,8 @@ class SearchBook extends React.Component {
                             <li key={book.id}>
                                 <div className="book">
                                     <div className="book-top">
-                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}>
-                                        </div>
+                                        {book.imageLinks && (<div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}>
+                                        </div>)}
                                         <div className="book-shelf-changer">
                                             <select defaultValue={book.shelf} onChange={(event) => this.props.onUpdateShelf(event.target.value,book)}>
                                                 <option value="none" disabled>Move to...</option>
