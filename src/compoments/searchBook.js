@@ -17,13 +17,24 @@ class SearchBook extends React.Component {
 
     //use the search query to update the book's shelf,if nothing find or Error happen, console log the Error message
     searchBook =(query) => {
+        //still have problem, should check
         if (query) {
-            let onShelf = [];
             BooksAPI.search(query).then(Response => {
                 if (!Response.error) {
+                    let onShelf = [];
+                    for (let book of this.state.booksOnShelf) {
+                        for (let b of Response) {
+                            if (book.id === b.id) {
+                                onShelf.push(book);
+                                continue;
+                            }
+                        }
+                    }
+                    console.log(onShelf);
+
                     for (let book of this.state.booksOnShelf) {
                         Response = Response.filter((b) => b.id !== book.id);
-                        onShelf = onShelf.concat(Response.filter((b) => b.id === book.id)); 
+                        
                     }
                     let temp = Response.map(function(book) {
                         book.shelf = 'none';
