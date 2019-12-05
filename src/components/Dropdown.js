@@ -7,7 +7,7 @@ class Dropdown extends Component {
         const {updateBookOnShelf, book} = this.props
         return (
             <div className="book-shelf-changer">
-                <select defaultValue ="none" onChange={(event) => updateBookOnShelf(book, event.target.value)}>
+                <select defaultValue={book.shelf ? book.shelf : 'none'} onChange={(event) => updateBookOnShelf(book, event.target.value)}>
                     <option value="move" disabled>Move to...</option>
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>

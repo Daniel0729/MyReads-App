@@ -16,7 +16,9 @@ class SearchBar extends Component {
         BooksAPI.getAll().then((books) => {
             let booksOnshelfIDs = []
             books.forEach((book) => {
-                booksOnshelfIDs.push(book.id)
+                booksOnshelfIDs.push({id: book.id,
+                                      shelf: book.shelf
+                                        })
             })
             this.setState({booksOnShelf: booksOnshelfIDs})
         })
@@ -28,19 +30,24 @@ class SearchBar extends Component {
 
     searchBook = (query) => {
         BooksAPI.search(query).then((books) => {
-            let bookSearchResults = []
-            if (books == null ||books.error) {
+            if (books == null || books.error) {
                 this.setState({books: []})
             } 
             else {
+                const searchResultBooks = []
                 books.forEach((book) => {
-                    if (!this.state.booksOnShelf.includes(book.id)) {
-                        bookSearchResults.push(book)
+                    let bookOnShelf = this.state.booksOnShelf.filter((bookOnShelf) => {
+                        if (book.id === bookOnShelf.id) {
+                            return bookOnShelf
+                        }
+                    })
+                    if (bookOnShelf.length > 0) {
+                        book.shelf = bookOnShelf[0].shelf
                     }
+                    searchResultBooks.push(book)
                 })
-                this.setState({books: bookSearchResults})
-            }
-            
+                this.setState({books: searchResultBooks})
+            }     
         })
       }
     
