@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-// import * as BooksAPI from './BooksAPI'
-import '../App.css'
 
 class Dropdown extends Component {
     render() {

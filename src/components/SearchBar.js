@@ -3,7 +3,6 @@ import { Link  } from 'react-router-dom'
 import { Throttle } from 'react-throttle'
 import * as BooksAPI from '../BooksAPI'
 import Book from './Book'
-import '../App.css'
 
 
 class SearchBar extends Component {
@@ -40,6 +39,7 @@ class SearchBar extends Component {
                         if (book.id === bookOnShelf.id) {
                             return bookOnShelf
                         }
+                        return null
                     })
                     if (bookOnShelf.length > 0) {
                         book.shelf = bookOnShelf[0].shelf

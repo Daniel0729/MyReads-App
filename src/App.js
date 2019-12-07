@@ -59,7 +59,6 @@ class BooksApp extends React.Component {
     return (
       <Router>
         <Switch>
-          <div>
             <Route exact path='/' render={() => (
                 <div className="list-books">
                   <div className="list-books-title">
@@ -90,7 +89,6 @@ class BooksApp extends React.Component {
             <Route render={() => (
               <h1>404</h1>
             )}/>
-          </div>
         </Switch>
       </Router>
     )
